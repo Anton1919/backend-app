@@ -1,46 +1,55 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsRouter = void 0;
 const express_1 = require("express");
-const products_repository_1 = require("../repositories/products-repository");
+const products_db_repository_1 = require("../repositories/products-db-repository");
 exports.productsRouter = (0, express_1.Router)({});
-exports.productsRouter.get('/', (req, res) => {
+exports.productsRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const foundProducts = products_repository_1.productsRepository.getProductByTitle((_a = req.query.title) === null || _a === void 0 ? void 0 : _a.toString());
+    const foundProducts = yield products_db_repository_1.productsRepository.getProductByTitle((_a = req.query.title) === null || _a === void 0 ? void 0 : _a.toString());
     res.send(foundProducts);
-});
-exports.productsRouter.get('/:id', (req, res) => {
-    const product = products_repository_1.productsRepository.getProductById(+req.params.id);
+}));
+exports.productsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const product = yield products_db_repository_1.productsRepository.getProductById(+req.params.id);
     if (product) {
         res.send(product);
     }
     else {
         res.send(404);
     }
-});
+}));
 // DELETE product
-exports.productsRouter.delete('/:id', (req, res) => {
-    const isDeleted = products_repository_1.productsRepository.deleteProduct(+req.params.id);
+exports.productsRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const isDeleted = yield products_db_repository_1.productsRepository.deleteProduct(+req.params.id);
     if (isDeleted) {
         res.send(204);
     }
     else {
         res.send(404);
     }
-});
+}));
 // POST product
-exports.productsRouter.post('/', (req, res) => {
-    const newProduct = products_repository_1.productsRepository.createProduct(req.body.title);
+exports.productsRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newProduct = yield products_db_repository_1.productsRepository.createProduct(req.body.title);
     res.status(201).send(newProduct);
-});
+}));
 // PUT product
-exports.productsRouter.put('/:id', (req, res) => {
-    const isUpdated = products_repository_1.productsRepository.updateProduct(+req.params.id, req.body.title);
+exports.productsRouter.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const isUpdated = yield products_db_repository_1.productsRepository.updateProduct(+req.params.id, req.body.title);
     if (isUpdated) {
-        const product = products_repository_1.productsRepository.getProductById(+req.params.id);
+        const product = yield products_db_repository_1.productsRepository.getProductById(+req.params.id);
         res.send(product);
     }
     else {
         res.send(404);
     }
-});
+}));

@@ -1,6 +1,9 @@
-// repository - это data access layer, ниже чем наш роутер
+export type ProductsType = {
+    id: number,
+    title: string
+}
 
-const products = [
+const products: ProductsType[] = [
     {id: 1, title: 'banana'},
     {id: 2, title: 'apple'},
     {id: 3, title: 'orange'},
@@ -9,17 +12,17 @@ const products = [
 ];
 
 export const productsRepository = {
-    getProductByTitle(title: string | undefined) {
+    async getProductByTitle(title: string | undefined): Promise<ProductsType[]> {
         if (title) {
             return products.filter(p => p.title.toLowerCase().indexOf(title) > -1)
         } else {
             return products
         }
     },
-    getProductById(productId: number) {
+    async getProductById(productId: number): Promise<ProductsType | undefined> {
         return products.find(p => p.id === productId)
     },
-    createProduct(title: string) {
+    async createProduct(title: string): Promise<ProductsType[]> {
         const newProduct = {
             id: +(new Date()),
             title
@@ -27,7 +30,7 @@ export const productsRepository = {
         products.push(newProduct)
         return products
     },
-    updateProduct(productId: number, title: string) {
+    async updateProduct(productId: number, title: string): Promise<boolean> {
         const product = products.find(p => p.id === productId)
         if (product) {
             product.title = title
@@ -36,7 +39,7 @@ export const productsRepository = {
             return false
         }
     },
-    deleteProduct(productId: number) {
+    async deleteProduct(productId: number): Promise<boolean> {
         for (let i = 0; i < products.length; i++) {
             if (products[i].id === productId) {
                 products.splice(i, 1)
