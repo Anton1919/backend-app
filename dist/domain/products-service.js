@@ -9,39 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productsRepository = void 0;
-const db_1 = require("./db");
-exports.productsRepository = {
+exports.productsService = void 0;
+const products_db_repository_1 = require("../repositories/products-db-repository");
+exports.productsService = {
     getProductByTitle(title) {
         return __awaiter(this, void 0, void 0, function* () {
-            const filter = {};
-            if (title) {
-                filter.title = { $regex: title };
-            }
-            return db_1.productCollection.find(filter).toArray();
+            return yield products_db_repository_1.productsRepository.getProductByTitle(title);
         });
     },
     getProductById(productId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield db_1.productCollection.findOne({ id: productId });
+            return yield products_db_repository_1.productsRepository.getProductById(productId);
         });
     },
-    createProduct(newProduct) {
+    createProduct(title) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield db_1.productCollection.insertOne(newProduct);
-            return newProduct;
+            const newProduct = {
+                id: +new Date(),
+                title,
+            };
+            return yield products_db_repository_1.productsRepository.createProduct(newProduct);
         });
     },
     updateProduct(productId, title) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield db_1.productCollection.updateOne({ id: productId }, { $set: { title } });
-            return result.matchedCount === 1;
+            return yield products_db_repository_1.productsRepository.updateProduct(productId, title);
         });
     },
     deleteProduct(productId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield db_1.productCollection.deleteOne({ id: productId });
-            return result.deletedCount === 1;
+            return yield products_db_repository_1.productsRepository.deleteProduct(productId);
         });
     },
 };

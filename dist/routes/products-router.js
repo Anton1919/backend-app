@@ -11,15 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsRouter = void 0;
 const express_1 = require("express");
-const products_db_repository_1 = require("../repositories/products-db-repository");
+const products_service_1 = require("../domain/products-service");
 exports.productsRouter = (0, express_1.Router)({});
 exports.productsRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const foundProducts = yield products_db_repository_1.productsRepository.getProductByTitle((_a = req.query.title) === null || _a === void 0 ? void 0 : _a.toString());
+    const foundProducts = yield products_service_1.productsService.getProductByTitle((_a = req.query.title) === null || _a === void 0 ? void 0 : _a.toString());
     res.send(foundProducts);
 }));
 exports.productsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield products_db_repository_1.productsRepository.getProductById(+req.params.id);
+    const product = yield products_service_1.productsService.getProductById(+req.params.id);
     if (product) {
         res.send(product);
     }
@@ -29,7 +29,7 @@ exports.productsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 
 }));
 // DELETE product
 exports.productsRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const isDeleted = yield products_db_repository_1.productsRepository.deleteProduct(+req.params.id);
+    const isDeleted = yield products_service_1.productsService.deleteProduct(+req.params.id);
     if (isDeleted) {
         res.send(204);
     }
@@ -39,14 +39,14 @@ exports.productsRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, vo
 }));
 // POST product
 exports.productsRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newProduct = yield products_db_repository_1.productsRepository.createProduct(req.body.title);
+    const newProduct = yield products_service_1.productsService.createProduct(req.body.title);
     res.status(201).send(newProduct);
 }));
 // PUT product
 exports.productsRouter.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const isUpdated = yield products_db_repository_1.productsRepository.updateProduct(+req.params.id, req.body.title);
+    const isUpdated = yield products_service_1.productsService.updateProduct(+req.params.id, req.body.title);
     if (isUpdated) {
-        const product = yield products_db_repository_1.productsRepository.getProductById(+req.params.id);
+        const product = yield products_service_1.productsService.getProductById(+req.params.id);
         res.send(product);
     }
     else {
